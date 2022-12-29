@@ -7,7 +7,7 @@ from types import ModuleType
 import sys
 
 from spacy import Language
-from spacy.training.loggers import console_logger
+from spacy.util import registry
 from spacy.util import SimpleFrozenList
 
 from .util import dict_to_dot, dot_to_dict, setup_custom_stats_matcher
@@ -275,6 +275,7 @@ def _setup_wandb(
 def _setup_console_logger(
     nlp: "Language", stdout: IO = sys.stdout, stderr: IO = sys.stderr
 ) -> Tuple[Callable, Callable]:
+    console_logger = registry.get("loggers", "spacy.ConsoleLogger.v1")
     console = console_logger(progress_bar=False)
     console_log_step, console_finalize = console(nlp, stdout, stderr)
     return console_log_step, console_finalize
